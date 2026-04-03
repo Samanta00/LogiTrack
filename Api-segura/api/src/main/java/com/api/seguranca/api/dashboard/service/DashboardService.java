@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import com.api.seguranca.api.dashboard.repository.DashboardRepository;
 import com.api.seguranca.api.dashboard.dto.DashboardDTO;
 import com.api.seguranca.api.dashboard.dto.ManutencaoDTO;
+import com.api.seguranca.api.dashboard.dto.RankingVeiculoDTO;
 import com.api.seguranca.api.dashboard.dto.VolumePorCategoriaDTO;
 
 @Service
@@ -69,4 +70,20 @@ public class DashboardService {
             (String) row[6]
         )).toList();
     }
+    public RankingVeiculoDTO getVeiculoMaisUtilizado() {
+
+        List<Object[]> results = repository.findVeiculoMaisUtilizado();
+    
+        if (results.isEmpty()) {
+            return new RankingVeiculoDTO(0L, 0.0);
+        }
+    
+        Object[] result = results.get(0);
+    
+        return new RankingVeiculoDTO(
+            ((Number) result[0]).longValue(),
+            ((Number) result[1]).doubleValue()
+        );
+    }
+
 }

@@ -37,5 +37,17 @@ public interface DashboardRepository extends JpaRepository<ViagemEntity, Long> {
             """, nativeQuery = true)
     List<Object[]> cronogramaManutencao();
 
+    @Query(value = """
+        SELECT veiculo_id, SUM(km_percorrida) AS total_km 
+        FROM viagens 
+        GROUP BY veiculo_id 
+        ORDER BY total_km DESC 
+        LIMIT 1
+    """, nativeQuery = true)
+    List<Object[]> findVeiculoMaisUtilizado();
+
+    
+    
+
 }
 
