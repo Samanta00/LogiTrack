@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import com.api.seguranca.api.dashboard.dto.DashboardDTO; 
 import com.api.seguranca.api.dashboard.service.DashboardService;
+import com.api.seguranca.api.viagem.entity.ViagemEntity;
 
 
 @RestController
@@ -23,4 +24,15 @@ public class DashboardController {
     public ResponseEntity<DashboardDTO> getDashboard() {
         return ResponseEntity.ok(service.getDashboard());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DashboardDTO> getTotalPercorridoVeiculo(@PathVariable Long id){
+        return ResponseEntity.ok(service.somarKmPorVeiculo(id));
+    }
+    @GetMapping("/categoria")
+    public ResponseEntity<DashboardDTO> RetornoVolumePorCategoria (@PathVariable String tipo){
+        return ResponseEntity.ok(service.retornoVolumePorCategoria(tipo));
+    }
+
+  
 }

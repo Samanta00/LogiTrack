@@ -24,4 +24,24 @@ public class DashboardService {
 
         return dto;
     }
+
+    public DashboardDTO somarKmPorVeiculo(Long id){
+        DashboardDTO dto = new DashboardDTO();
+    
+        Double totalKm = repository.somarKmPorVeiculo(id);
+    
+        dto.setTotalKm(totalKm != null ? totalKm : 0.0);
+        dto.setProjecaoFinanceira(0.0);
+    
+        return dto;
+    }
+
+    public DashboardDTO retornoVolumePorCategoria(String tipo){
+        DashboardDTO dto = new DashboardDTO();
+
+        int totalVolume = repository.
+
+
+    }
+
 }
