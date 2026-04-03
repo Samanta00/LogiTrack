@@ -9,6 +9,8 @@ import com.api.seguranca.api.viagem.entity.ViagemEntity;
 
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 @RestController
 @RequestMapping("/viagens")
 @RequiredArgsConstructor
@@ -25,4 +27,13 @@ public class ViagemController {
     public List<ViagemEntity> listar() {
         return service.listar();
     }
-}
+
+    @GetMapping("/{id}")
+    public ViagemEntity listarViagemPorId(@PathVariable Long id){
+        return service.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Não encontrado nenhum registro dessa viagem"));
+           
+    }        
+    }
+
+        

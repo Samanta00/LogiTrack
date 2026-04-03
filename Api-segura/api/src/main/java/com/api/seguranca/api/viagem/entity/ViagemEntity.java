@@ -2,8 +2,13 @@ package com.api.seguranca.api.viagem.entity;
 
 import com.api.seguranca.api.veiculo.entity.VeiculoEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
+
+@Getter
+@Setter
 @Entity
 @Table(name = "viagens")
 public class ViagemEntity {
@@ -31,6 +36,7 @@ public class ViagemEntity {
 
     public VeiculoEntity getVeiculo() { return veiculo; }
     public void setVeiculo(VeiculoEntity veiculo) { this.veiculo = veiculo; }
+    
 
     public LocalDateTime getDataSaida() { return dataSaida; }
     public void setDataSaida(LocalDateTime dataSaida) { this.dataSaida = dataSaida; }

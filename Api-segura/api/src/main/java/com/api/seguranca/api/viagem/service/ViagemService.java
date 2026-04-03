@@ -10,6 +10,7 @@ import com.api.seguranca.api.veiculo.entity.VeiculoEntity;
 import com.api.seguranca.api.veiculo.repository.VeiculoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +42,9 @@ public class ViagemService {
 
     public List<ViagemEntity> listar() {
         return viagemRepository.findAllWithVeiculo();
+    }
+    
+    public Optional <ViagemEntity> buscarPorId(Long id){
+        return viagemRepository.findById(id);
     }
 }
