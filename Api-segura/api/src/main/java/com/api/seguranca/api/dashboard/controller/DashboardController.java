@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import com.api.seguranca.api.dashboard.dto.DashboardDTO;
+import com.api.seguranca.api.dashboard.dto.ManutencaoDTO;
 import com.api.seguranca.api.dashboard.dto.VolumePorCategoriaDTO;
 import com.api.seguranca.api.dashboard.service.DashboardService;
 import com.api.seguranca.api.viagem.entity.ViagemEntity;
@@ -34,6 +35,13 @@ public class DashboardController {
     public ResponseEntity<VolumePorCategoriaDTO> retornoVolumePorCategoria(@PathVariable String tipo){
         return ResponseEntity.ok(service.retornoVolumePorCategoria(tipo));
     }
+    @GetMapping("/manutencao")
+    public ResponseEntity<List<ManutencaoDTO>> getCronogramaManutencao(){
+        return ResponseEntity.ok(service.cronogramaManutencao());
+    }
+        
+       
+    
 
   
 }

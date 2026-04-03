@@ -32,5 +32,10 @@ public interface DashboardRepository extends JpaRepository<ViagemEntity, Long> {
     """)
     List<Object[]> countByTipo(@Param("tipo") String tipo);
 
+    @Query(value = """
+            SELECT * FROM manutencoes WHERE status = 'PENDENTE' order by data_inicio ASC LIMIT 5
+            """, nativeQuery = true)
+    List<Object[]> cronogramaManutencao();
+
 }
 
