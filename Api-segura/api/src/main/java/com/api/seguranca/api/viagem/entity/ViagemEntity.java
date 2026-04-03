@@ -37,7 +37,6 @@ public class ViagemEntity {
     public VeiculoEntity getVeiculo() { return veiculo; }
     public void setVeiculo(VeiculoEntity veiculo) { this.veiculo = veiculo; }
     
-
     public LocalDateTime getDataSaida() { return dataSaida; }
     public void setDataSaida(LocalDateTime dataSaida) { this.dataSaida = dataSaida; }
 

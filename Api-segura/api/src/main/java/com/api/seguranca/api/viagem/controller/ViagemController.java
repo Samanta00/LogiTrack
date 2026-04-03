@@ -8,8 +8,8 @@ import com.api.seguranca.api.viagem.dto.ViagemDTO;
 import com.api.seguranca.api.viagem.entity.ViagemEntity;
 
 import java.util.List;
+import java.util.Optional;
 
-import javax.management.RuntimeErrorException;
 
 @RestController
 @RequestMapping("/viagens")
@@ -33,7 +33,20 @@ public class ViagemController {
         return service.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Não encontrado nenhum registro dessa viagem"));
            
-    }        
+    }      
+    
+    @PutMapping("/{id}")
+    public ViagemEntity atualizacaoViagemPorId(@PathVariable Long id, @RequestBody ViagemDTO dto){
+        return service.atualizacaoViagem(id, dto);    
+    
     }
+
+    @DeleteMapping("/{id}")
+    public void deletarViagemPorId(@PathVariable Long id){
+        service.deletarViagem(id);
+    }
+
+}
+
 
         
