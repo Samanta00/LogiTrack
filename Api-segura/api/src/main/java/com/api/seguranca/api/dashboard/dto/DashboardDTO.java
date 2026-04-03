@@ -7,4 +7,5 @@ public class DashboardDTO {
 
     private Double totalKm;
     private Double projecaoFinanceira;
+    private String volumePorCategoria;
 }

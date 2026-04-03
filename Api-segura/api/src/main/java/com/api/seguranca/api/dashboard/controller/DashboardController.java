@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
-import com.api.seguranca.api.dashboard.dto.DashboardDTO; 
+import com.api.seguranca.api.dashboard.dto.DashboardDTO;
+import com.api.seguranca.api.dashboard.dto.VolumePorCategoriaDTO;
 import com.api.seguranca.api.dashboard.service.DashboardService;
 import com.api.seguranca.api.viagem.entity.ViagemEntity;
 
@@ -29,8 +30,8 @@ public class DashboardController {
     public ResponseEntity<DashboardDTO> getTotalPercorridoVeiculo(@PathVariable Long id){
         return ResponseEntity.ok(service.somarKmPorVeiculo(id));
     }
-    @GetMapping("/categoria")
-    public ResponseEntity<DashboardDTO> RetornoVolumePorCategoria (@PathVariable String tipo){
+    @GetMapping("/categoria/{tipo}")
+    public ResponseEntity<VolumePorCategoriaDTO> retornoVolumePorCategoria(@PathVariable String tipo){
         return ResponseEntity.ok(service.retornoVolumePorCategoria(tipo));
     }
 

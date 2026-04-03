@@ -24,5 +24,13 @@ public interface DashboardRepository extends JpaRepository<ViagemEntity, Long> {
     """, nativeQuery = true)
     Double somarKmPorVeiculo(@Param("id") Long id);
 
+    @Query("""
+        SELECT ve.tipo, COUNT(*)
+        FROM VeiculoEntity ve
+        WHERE UPPER(ve.tipo) = UPPER(:tipo)
+        GROUP BY ve.tipo
+    """)
+    List<Object[]> countByTipo(@Param("tipo") String tipo);
+
 }
 
