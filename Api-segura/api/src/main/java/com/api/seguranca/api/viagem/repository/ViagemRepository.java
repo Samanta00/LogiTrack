@@ -1,6 +1,7 @@
 package com.api.seguranca.api.viagem.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,14 @@ public interface ViagemRepository extends JpaRepository<ViagemEntity, Long> {
     
 
     @Query("SELECT v FROM ViagemEntity v WHERE v.id = :id")
-    Optional<ViagemEntity> findOneTrial(@Param("id") Long id);
-    
+    Optional<ViagemEntity> encontrarUmaViagem(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE ViagemEntity v SET v.destino = :destino WHERE v.id = :id ")
+    int atualizacaoViagem(@Param("id") Long id, @Param("") String destino);
+
+    @Query("DELETE FROM ViagemEntity v WHERE v.id = :id")
+    int deletarViagem(@Param("id") Long id);
+ 
 }
 

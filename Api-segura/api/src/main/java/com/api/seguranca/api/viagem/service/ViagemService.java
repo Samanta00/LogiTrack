@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import com.api.seguranca.api.viagem.entity.ViagemEntity;
 import com.api.seguranca.api.viagem.dto.ViagemDTO;
 import com.api.seguranca.api.viagem.repository.ViagemRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.api.seguranca.api.veiculo.entity.VeiculoEntity;
 import com.api.seguranca.api.veiculo.repository.VeiculoRepository;
 
@@ -45,6 +48,35 @@ public class ViagemService {
     }
     
     public Optional <ViagemEntity> buscarPorId(Long id){
-        return viagemRepository.findById(id);
+        return viagemRepository.encontrarUmaViagem(id);
     }
+
+    @Transactional
+    public ViagemEntity atualizacaoViagem(Long id, ViagemDTO dto){
+        ViagemEntity viagem = viagemRepository.encontrarUmaViagem(id)
+            .orElseThrow(() -> new RuntimeException("Viagem não encontrada"));
+    
+        // BUSCAR veículo real no banco
+        VeiculoEntity veiculo = veiculoRepository.findById(dto.getVeiculoId())
+        .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
+    
+        viagem.setVeiculo(veiculo);
+        viagem.setDestino(dto.getDestino());
+        viagem.setOrigem(dto.getOrigem());
+        viagem.setKmPercorrida(dto.getKmPercorrida());
+        viagem.setDataSaida(dto.getDataSaida());
+        viagem.setDataChegada(dto.getDataChegada());
+    
+        return viagemRepository.save(viagem);
+    }
+
+    @Transactional
+    public void deletarViagem(Long id){
+        if (!viagemRepository.existsById(id)) {
+            throw new RuntimeException("Viagem não encontrada");
+        }
+    
+        viagemRepository.deleteById(id);
+    }
+
 }
