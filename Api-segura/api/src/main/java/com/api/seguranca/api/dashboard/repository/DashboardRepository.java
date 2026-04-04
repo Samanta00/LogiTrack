@@ -46,6 +46,15 @@ public interface DashboardRepository extends JpaRepository<ViagemEntity, Long> {
     """, nativeQuery = true)
     List<Object[]> findVeiculoMaisUtilizado();
 
+    @Query(value = """
+        SELECT SUM(custo_estimado) AS total_mes_atual
+        FROM manutencoes
+        WHERE 
+            MONTH(data_inicio) = MONTH(CURRENT_DATE)
+            AND YEAR(data_inicio) = YEAR(CURRENT_DATE);
+    """, nativeQuery = true)
+    Double getProjecaoFinanceiraMes();
+
     
     
 

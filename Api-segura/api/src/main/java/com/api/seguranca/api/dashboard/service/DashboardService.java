@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import com.api.seguranca.api.dashboard.repository.DashboardRepository;
 import com.api.seguranca.api.dashboard.dto.DashboardDTO;
 import com.api.seguranca.api.dashboard.dto.ManutencaoDTO;
+import com.api.seguranca.api.dashboard.dto.ProjecaoFinanceiraDTO;
 import com.api.seguranca.api.dashboard.dto.RankingVeiculoDTO;
 import com.api.seguranca.api.dashboard.dto.VolumePorCategoriaDTO;
 
@@ -83,6 +84,14 @@ public class DashboardService {
         return new RankingVeiculoDTO(
             ((Number) result[0]).longValue(),
             ((Number) result[1]).doubleValue()
+        );
+    }
+    public ProjecaoFinanceiraDTO getProjecaoFinanceiraMes() {
+
+        Double total = repository.getProjecaoFinanceiraMes();
+
+        return new ProjecaoFinanceiraDTO(
+            total != null ? total : 0.0
         );
     }
 

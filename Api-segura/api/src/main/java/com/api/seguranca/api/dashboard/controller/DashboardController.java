@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import com.api.seguranca.api.dashboard.dto.DashboardDTO;
 import com.api.seguranca.api.dashboard.dto.ManutencaoDTO;
+import com.api.seguranca.api.dashboard.dto.ProjecaoFinanceiraDTO;
 import com.api.seguranca.api.dashboard.dto.RankingVeiculoDTO;
 import com.api.seguranca.api.dashboard.dto.VolumePorCategoriaDTO;
 import com.api.seguranca.api.dashboard.service.DashboardService;
@@ -44,9 +45,9 @@ public class DashboardController {
     public ResponseEntity<RankingVeiculoDTO> getRanking() {
         return ResponseEntity.ok(service.getVeiculoMaisUtilizado());
     }
+    @GetMapping("/projecao")
+    public ResponseEntity<ProjecaoFinanceiraDTO> getProjecaoFinanceira() {
+        return ResponseEntity.ok(service.getProjecaoFinanceiraMes());
+    }
         
-       
-    
-
-  
 }
