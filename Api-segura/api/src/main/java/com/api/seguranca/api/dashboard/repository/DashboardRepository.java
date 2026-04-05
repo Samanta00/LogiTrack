@@ -24,13 +24,16 @@ public interface DashboardRepository extends JpaRepository<ViagemEntity, Long> {
     """, nativeQuery = true)
     Double somarKmPorVeiculo(@Param("id") Long id);
 
+
     @Query("""
-        SELECT ve.tipo, COUNT(*)
-        FROM VeiculoEntity ve
+        SELECT ve.tipo, SUM(v.kmPercorrida), COUNT(v)
+        FROM ViagemEntity v
+        JOIN v.veiculo ve
         WHERE UPPER(ve.tipo) = UPPER(:tipo)
         GROUP BY ve.tipo
     """)
-    List<Object[]> countByTipo(@Param("tipo") String tipo);
+    List<Object[]> somarKmEQuantidadePorTipo(@Param("tipo") String tipo);
+
 
     @Query(value = """
             SELECT * FROM manutencoes WHERE status = 'PENDENTE' order by data_inicio ASC LIMIT 5
@@ -38,20 +41,33 @@ public interface DashboardRepository extends JpaRepository<ViagemEntity, Long> {
     List<Object[]> cronogramaManutencao();
 
     @Query(value = """
-        SELECT veiculo_id, SUM(km_percorrida) AS total_km 
-        FROM viagens 
-        GROUP BY veiculo_id 
-        ORDER BY total_km DESC 
+        SELECT v.veiculo_id, SUM(v.km_percorrida) AS total_km,
+               ve.modelo, ve.placa
+        FROM viagens v
+        JOIN veiculos ve ON v.veiculo_id = ve.id
+        GROUP BY v.veiculo_id, ve.modelo, ve.placa
+        ORDER BY total_km DESC
         LIMIT 1
     """, nativeQuery = true)
     List<Object[]> findVeiculoMaisUtilizado();
+
+
+    @Query(value = """
+        SELECT tipo_servico, SUM(custo_estimado) AS total
+        FROM manutencoes
+        WHERE 
+            MONTH(data_inicio) = MONTH(CURRENT_DATE)
+            AND YEAR(data_inicio) = YEAR(CURRENT_DATE)
+        GROUP BY tipo_servico
+    """, nativeQuery = true)
+    List<Object[]> getProjecaoPorTipo();
 
     @Query(value = """
         SELECT SUM(custo_estimado) AS total_mes_atual
         FROM manutencoes
         WHERE 
             MONTH(data_inicio) = MONTH(CURRENT_DATE)
-            AND YEAR(data_inicio) = YEAR(CURRENT_DATE);
+            AND YEAR(data_inicio) = YEAR(CURRENT_DATE)
     """, nativeQuery = true)
     Double getProjecaoFinanceiraMes();
 

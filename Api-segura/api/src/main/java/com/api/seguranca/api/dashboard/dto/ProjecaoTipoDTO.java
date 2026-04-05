@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class VolumePorCategoriaDTO {
+public class ProjecaoTipoDTO {
     private String tipo;
-    private Double totalKm;
-    private Long quantidadeViagens;
+    private Double total;
 }

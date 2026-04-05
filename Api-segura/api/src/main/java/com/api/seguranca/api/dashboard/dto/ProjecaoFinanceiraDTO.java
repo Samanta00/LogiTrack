@@ -1,5 +1,7 @@
 package com.api.seguranca.api.dashboard.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,4 +10,6 @@ import lombok.Data;
 public class ProjecaoFinanceiraDTO {
 
     private Double totalMesAtual;
+    private List<ProjecaoTipoDTO> porTipo;
+
 }

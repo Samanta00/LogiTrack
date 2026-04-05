@@ -9,4 +9,6 @@ public class RankingVeiculoDTO {
 
     private Long veiculoId;
     private Double totalKm;
+    private String modelo;
+    private String placa;
 }
