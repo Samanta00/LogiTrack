@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply antialiased text-slate-900;
+    /* Fundo sutil da imagem de referência */
+    background-color: #f4f7f6;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(100, 149, 237, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(168, 209, 168, 0.05) 0px, transparent 50%);
+  }
+}
+
+/* --- MELHORIAS DE COMPONENTES --- */
+
+@layer components {
+  /* Card estilo "Clean Slate" da referência */
+  .card-logi {
+    @apply bg-white rounded-[12px] border border-slate-200/60 shadow-sm transition-all duration-300;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .card-logi:hover {
+    @apply shadow-md border-slate-300/50;
+    transform: translateY(-2px);
+  }
+
+  /* Estilo da Tabela Minimalista */
+  .table-container {
+    @apply overflow-hidden rounded-[12px] border border-slate-200 bg-white;
+  }
+
+  .table-header {
+    @apply bg-slate-50/50 text-[10px] uppercase font-bold tracking-widest text-slate-400 border-b border-slate-100;
+  }
+
+  /* Badge de Status com design "Pill" */
+  .status-badge {
+    @apply px-2.5 py-0.5 rounded-full text-[10px] font-bold border tracking-wide uppercase;
+  }
+}
+
+/* --- SCROLLBAR MODERNA (MAIS FINA E DISCRETA) --- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* --- ANIMAÇÃO DE CARREGAMENTO PARA O GRÁFICO --- */
+@keyframes chart-reveal {
+  from { opacity: 0; transform: scaleY(0.95); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
+.animate-chart {
+  animation: chart-reveal 0.6s ease-out forwards;
+}
