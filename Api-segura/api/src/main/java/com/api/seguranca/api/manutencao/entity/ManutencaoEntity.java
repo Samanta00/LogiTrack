@@ -4,7 +4,6 @@ import com.api.seguranca.api.veiculo.entity.VeiculoEntity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.math.BigDecimal;
 import jakarta.persistence.*;
 
@@ -15,7 +14,7 @@ public class ManutencaoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "veiculo_id")
@@ -33,5 +32,63 @@ public class ManutencaoEntity {
     @Column(name = "custo_estimado")
     private BigDecimal custoEstimado;
 
+    @Column(name = "status")
     private String status;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public VeiculoEntity getVeiculo() {
+        return veiculo;
+    }
+
+    public void setVeiculo(VeiculoEntity veiculo) {
+        this.veiculo = veiculo;
+    }
+
+    public LocalDate getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(LocalDate dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public LocalDate getDataFinalizacao() {
+        return dataFinalizacao;
+    }
+
+    public void setDataFinalizacao(LocalDate dataFinalizacao) {
+        this.dataFinalizacao = dataFinalizacao;
+    }
+
+    public String getTipoServico() {
+        return tipoServico;
+    }
+
+    public void setTipoServico(String tipoServico) {
+        this.tipoServico = tipoServico;
+    }
+
+    public BigDecimal getCustoEstimado() {
+        return custoEstimado;
+    }
+
+    public void setCustoEstimado(BigDecimal custoEstimado) {
+        this.custoEstimado = custoEstimado;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }
