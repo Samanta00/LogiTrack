@@ -3,6 +3,7 @@ import { api } from "../api/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, Edit3, Plus, X } from "lucide-react"; // npm install lucide-react
 import "../personalizacao/dashboard/index.css";
+import axios from "axios";
 
 // Interface baseada no seu JSON de retorno
 interface Viagem {
@@ -38,7 +39,7 @@ export default function Viagem() {
     destino: "",
     kmPercorrida: 0,
     dataSaida: "",
-    dataChegada: ""
+    dataChegada: "",
   });
 
   // 1. LISTAR VIAGENS
@@ -51,7 +52,9 @@ export default function Viagem() {
     }
   };
 
-  useEffect(() => { carregarViagens(); }, []);
+  useEffect(() => {
+    carregarViagens();
+  }, []);
 
   // 2. BUSCAR VIAGEM PARA EDITAR (Pelo ID na rota)
   const selecionarParaEdicao = async (id: number) => {
@@ -63,12 +66,12 @@ export default function Viagem() {
         origem: v.origem,
         destino: v.destino,
         kmPercorrida: v.kmPercorrida,
-        dataSaida: v.dataSaida.split('.')[0], // Limpa milissegundos para o input
-        dataChegada: v.dataChegada.split('.')[0]
+        dataSaida: v.dataSaida.split(".")[0], // Limpa milissegundos para o input
+        dataChegada: v.dataChegada.split(".")[0],
       });
       setSelectedId(id);
       setEditMode(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (e) {
       alert("Erro ao buscar detalhes da viagem.");
     }
@@ -80,14 +83,25 @@ export default function Viagem() {
     setLoading(true);
     try {
       if (editMode && selectedId) {
-        await api.put(`/viagens/${selectedId}`, formData);
+        const retorno = await api.put(`/viagens/${selectedId}`, formData);
+        console.log(retorno);
+        return retorno;
       } else {
-        await api.post("/viagens", formData);
+        const criacao = await api.post("/viagens", formData);
+        console.log(criacao);
+        return criacao;
       }
       resetForm();
       carregarViagens();
-    } catch (e) {
-      alert("Erro na operação.");
+    } catch (erro) {
+      if (axios.isAxiosError(erro)) {
+        const mensagem =
+          erro.response?.data?.message ||
+          erro.response?.data?.error ||
+          "Erro inesperado";
+
+        alert(mensagem);
+      }
     } finally {
       setLoading(false);
     }
@@ -105,7 +119,14 @@ export default function Viagem() {
   };
 
   const resetForm = () => {
-    setFormData({ veiculoId: 1, origem: "", destino: "", kmPercorrida: 0, dataSaida: "", dataChegada: "" });
+    setFormData({
+      veiculoId: 1,
+      origem: "",
+      destino: "",
+      kmPercorrida: 0,
+      dataSaida: "",
+      dataChegada: "",
+    });
     setEditMode(false);
     setSelectedId(null);
   };
@@ -113,54 +134,124 @@ export default function Viagem() {
   return (
     <div className="p-8 min-h-screen bg-[#f4f7f6]">
       <div className="max-w-5xl mx-auto space-y-8">
-        
         {/* FORMULÁRIO (CRIAR/EDITAR) */}
-        <motion.div layout className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <motion.div
+          layout
+          className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+        >
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-bold text-gray-800">
               {editMode ? `Editando Viagem #${selectedId}` : "Nova Viagem"}
             </h2>
             {editMode && (
-              <button onClick={resetForm} className="text-gray-400 hover:text-red-500 transition-colors">
+              <button
+                onClick={resetForm}
+                className="text-gray-400 hover:text-red-500 transition-colors"
+              >
                 <X size={20} />
               </button>
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          >
             <div className="md:col-span-1">
               <label className="label-style">Veículo</label>
-              <select 
+              <select
                 className="input-style"
                 value={formData.veiculoId}
-                onChange={(e) => setFormData({...formData, veiculoId: Number(e.target.value)})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    veiculoId: Number(e.target.value),
+                  })
+                }
               >
-                {VEICULOS_DISPONIVEIS.map(v => <option key={v.id} value={v.id}>{v.nome}</option>)}
+                {VEICULOS_DISPONIVEIS.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.nome}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
               <label className="label-style">Origem</label>
-              <input type="text" className="input-style" value={formData.origem} onChange={e => setFormData({...formData, origem: e.target.value})} required />
+              <input
+                type="text"
+                className="input-style"
+                value={formData.origem}
+                onChange={(e) =>
+                  setFormData({ ...formData, origem: e.target.value })
+                }
+                required
+              />
             </div>
             <div>
               <label className="label-style">Destino</label>
-              <input type="text" className="input-style" value={formData.destino} onChange={e => setFormData({...formData, destino: e.target.value})} required />
+              <input
+                type="text"
+                className="input-style"
+                value={formData.destino}
+                onChange={(e) =>
+                  setFormData({ ...formData, destino: e.target.value })
+                }
+                required
+              />
             </div>
             <div>
               <label className="label-style">KM</label>
-              <input type="number" className="input-style" value={formData.kmPercorrida} onChange={e => setFormData({...formData, kmPercorrida: Number(e.target.value)})} required />
+              <input
+                type="number"
+                className="input-style"
+                value={formData.kmPercorrida}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    kmPercorrida: Number(e.target.value),
+                  })
+                }
+                required
+              />
             </div>
             <div>
               <label className="label-style">Saída</label>
-              <input type="datetime-local" className="input-style" value={formData.dataSaida} onChange={e => setFormData({...formData, dataSaida: e.target.value})} required />
+              <input
+                type="datetime-local"
+                className="input-style"
+                value={formData.dataSaida}
+                onChange={(e) =>
+                  setFormData({ ...formData, dataSaida: e.target.value })
+                }
+                required
+              />
             </div>
             <div>
               <label className="label-style">Chegada</label>
-              <input type="datetime-local" className="input-style" value={formData.dataChegada} onChange={e => setFormData({...formData, dataChegada: e.target.value})} required />
+              <input
+                type="datetime-local"
+                className="input-style"
+                value={formData.dataChegada}
+                onChange={(e) =>
+                  setFormData({ ...formData, dataChegada: e.target.value })
+                }
+                required
+              />
             </div>
 
-            <button type="submit" disabled={loading} className={`md:col-span-3 py-3 rounded-xl font-bold text-white transition-all ${editMode ? 'bg-amber-500' : 'bg-indigo-600'}`}>
-              {loading ? "Salvando..." : editMode ? "Atualizar Viagem" : "Cadastrar Viagem"}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`md:col-span-3 py-3 rounded-xl font-bold text-white transition-all ${
+                editMode ? "bg-amber-500" : "bg-indigo-600"
+              }`}
+            >
+              {loading
+                ? "Salvando..."
+                : editMode
+                ? "Atualizar Viagem"
+                : "Cadastrar Viagem"}
             </button>
           </form>
         </motion.div>
@@ -168,10 +259,14 @@ export default function Viagem() {
         {/* LISTAGEM DE VIAGENS */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-5 bg-gray-50/50 border-b border-gray-100 flex justify-between items-center">
-            <h2 className="text-[10px] uppercase font-bold text-gray-400">Histórico de Viagens</h2>
-            <span className="text-xs text-gray-400">{viagens.length} viagens encontradas</span>
+            <h2 className="text-[10px] uppercase font-bold text-gray-400">
+              Histórico de Viagens
+            </h2>
+            <span className="text-xs text-gray-400">
+              {viagens.length} viagens encontradas
+            </span>
           </div>
-          
+
           <table className="w-full text-left">
             <thead className="text-[10px] uppercase text-gray-400 border-b border-gray-100">
               <tr>
@@ -185,27 +280,41 @@ export default function Viagem() {
             <tbody className="divide-y divide-gray-50">
               <AnimatePresence>
                 {viagens.map((v) => (
-                  <motion.tr 
-                    key={v.id} 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                  <motion.tr
+                    key={v.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0, x: -20 }}
                     className="hover:bg-gray-50/50 transition-colors text-sm"
                   >
-                    <td className="px-6 py-4 font-mono text-xs text-indigo-600 font-bold">#{v.id}</td>
+                    <td className="px-6 py-4 font-mono text-xs text-indigo-600 font-bold">
+                      #{v.id}
+                    </td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-gray-700">{v.veiculo.modelo}</div>
-                      <div className="text-[10px] text-gray-400">{v.veiculo.placa}</div>
+                      <div className="font-medium text-gray-700">
+                        {v.veiculo.modelo}
+                      </div>
+                      <div className="text-[10px] text-gray-400">
+                        {v.veiculo.placa}
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-gray-600">
                       {v.origem} → {v.destino}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-gray-800">{v.kmPercorrida} km</td>
+                    <td className="px-6 py-4 font-semibold text-gray-800">
+                      {v.kmPercorrida} km
+                    </td>
                     <td className="px-6 py-4 text-right space-x-2">
-                      <button onClick={() => selecionarParaEdicao(v.id)} className="p-2 text-amber-500 hover:bg-amber-50 rounded-lg transition-colors">
+                      <button
+                        onClick={() => selecionarParaEdicao(v.id)}
+                        className="p-2 text-amber-500 hover:bg-amber-50 rounded-lg transition-colors"
+                      >
                         <Edit3 size={16} />
                       </button>
-                      <button onClick={() => excluirViagem(v.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                      <button
+                        onClick={() => excluirViagem(v.id)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      >
                         <Trash2 size={16} />
                       </button>
                     </td>
