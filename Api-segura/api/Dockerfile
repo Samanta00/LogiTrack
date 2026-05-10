@@ -13,4 +13,5 @@ COPY --from=build /app/target/*.jar app.jar
 COPY src/main/resources/keystore.p12 keystore.p12
 # Porta HTTPS
 EXPOSE 8443
-ENTRYPOINT ["java","-jar","app.jar"]
+EXPOSE 5005
+ENTRYPOINT ["java","-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005","-jar","app.jar"]
