@@ -6,12 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import com.api.seguranca.api.dashboard.dto.DashboardDTO;
-import com.api.seguranca.api.dashboard.dto.ManutencaoDTO;
 import com.api.seguranca.api.dashboard.dto.ProjecaoFinanceiraDTO;
 import com.api.seguranca.api.dashboard.dto.RankingVeiculoDTO;
 import com.api.seguranca.api.dashboard.dto.VolumePorCategoriaDTO;
 import com.api.seguranca.api.dashboard.service.DashboardService;
 import com.api.seguranca.api.viagem.entity.ViagemEntity;
+import com.api.seguranca.api.manutencao.dto.ManutencaoDTO;
+import com.api.seguranca.api.manutencao.service.ManutencaoService;
 
 
 @RestController
@@ -19,9 +20,11 @@ import com.api.seguranca.api.viagem.entity.ViagemEntity;
 public class DashboardController {
 
     private final DashboardService service;
+    private final ManutencaoService manutencaoService;
 
-    public DashboardController(DashboardService service) {
+    public DashboardController(DashboardService service, ManutencaoService manutencaoService) {
         this.service = service;
+        this.manutencaoService = manutencaoService;
     }
 
     @GetMapping
@@ -39,7 +42,7 @@ public class DashboardController {
     }
     @GetMapping("/manutencao")
     public ResponseEntity<List<ManutencaoDTO>> getCronogramaManutencao(){
-        return ResponseEntity.ok(service.cronogramaManutencao());
+        return ResponseEntity.ok(manutencaoService.cronogramaManutencao());
     }
     @GetMapping("/ranking")
     public ResponseEntity<RankingVeiculoDTO> getRanking() {

@@ -34,12 +34,6 @@ public interface DashboardRepository extends JpaRepository<ViagemEntity, Long> {
     """)
     List<Object[]> somarKmEQuantidadePorTipo(@Param("tipo") String tipo);
 
-
-    @Query(value = """
-            SELECT * FROM manutencoes WHERE status = 'PENDENTE' order by data_inicio ASC LIMIT 5
-            """, nativeQuery = true)
-    List<Object[]> cronogramaManutencao();
-
     @Query(value = """
         SELECT v.veiculo_id, SUM(v.km_percorrida) AS total_km,
                ve.modelo, ve.placa

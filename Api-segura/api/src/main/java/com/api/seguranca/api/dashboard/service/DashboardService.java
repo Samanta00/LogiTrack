@@ -1,17 +1,19 @@
 package com.api.seguranca.api.dashboard.service;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 import com.api.seguranca.api.dashboard.repository.DashboardRepository;
 import com.api.seguranca.api.dashboard.dto.DashboardDTO;
-import com.api.seguranca.api.dashboard.dto.ManutencaoDTO;
 import com.api.seguranca.api.dashboard.dto.ProjecaoFinanceiraDTO;
 import com.api.seguranca.api.dashboard.dto.ProjecaoTipoDTO;
 import com.api.seguranca.api.dashboard.dto.RankingVeiculoDTO;
 import com.api.seguranca.api.dashboard.dto.VolumePorCategoriaDTO;
+import com.api.seguranca.api.manutencao.dto.ManutencaoDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -59,20 +61,6 @@ public class DashboardService {
         return new VolumePorCategoriaDTO(tipo.toUpperCase(), 0.0, 0L);
     }
 
-    public List<ManutencaoDTO> cronogramaManutencao(){
-
-        List<Object[]> lista = repository.cronogramaManutencao();
-    
-        return lista.stream().map(row -> new ManutencaoDTO(
-            ((Number) row[0]).longValue(),
-            ((Number) row[1]).longValue(),
-            row[2] != null ? ((java.sql.Date) row[2]).toLocalDate() : null,
-            row[3] != null ? ((java.sql.Date) row[3]).toLocalDate() : null,
-            (String) row[4],
-            row[5] != null ? ((Number) row[5]).doubleValue() : 0.0,
-            (String) row[6]
-        )).toList();
-    }
     public RankingVeiculoDTO getVeiculoMaisUtilizado() {
 
         List<Object[]> results = repository.findVeiculoMaisUtilizado();
