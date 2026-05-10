@@ -34,6 +34,11 @@ Sistema de gerenciamento logístico para controle de:
 * TailwindCSS
 * Lucide React
 
+
+<img width="1920" height="935" alt="formulario" src="https://github.com/user-attachments/assets/37428f1a-63be-48db-8e57-3179a00012cf" />
+<img width="1613" height="803" alt="logitrack" src="https://github.com/user-attachments/assets/6a622093-85ab-48aa-a12b-d5992a0134eb" />
+
+
 ---
 
 # Estrutura do Projeto
