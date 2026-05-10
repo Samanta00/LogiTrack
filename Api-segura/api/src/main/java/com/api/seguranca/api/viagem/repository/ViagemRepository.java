@@ -6,11 +6,31 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.api.seguranca.api.viagem.entity.ViagemEntity;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ViagemRepository extends JpaRepository<ViagemEntity, Long> {
+    @Query("""
+        SELECT COUNT(v) > 0
+        FROM ViagemEntity v
+        WHERE v.veiculo.id = :veiculoId
+        AND (
+            :dataSaida BETWEEN v.dataSaida AND v.dataChegada
+            OR
+            :dataChegada BETWEEN v.dataSaida AND v.dataChegada
+            OR
+            v.dataSaida BETWEEN :dataSaida AND :dataChegada
+        )
+    """)
+    boolean existsConflitoViagem(
+        Long veiculoId,
+        LocalDateTime dataSaida,
+        LocalDateTime dataChegada
+    );
+
     @Query("SELECT v FROM ViagemEntity v JOIN FETCH v.veiculo")
     List<ViagemEntity> findAllWithVeiculo();
     

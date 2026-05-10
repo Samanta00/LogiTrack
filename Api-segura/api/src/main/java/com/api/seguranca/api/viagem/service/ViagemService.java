@@ -1,5 +1,6 @@
 package com.api.seguranca.api.viagem.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +10,8 @@ import com.api.seguranca.api.viagem.repository.ViagemRepository;
 
 import jakarta.transaction.Transactional;
 
+import com.api.seguranca.api.exception.ConflitoViagemException;
+import com.api.seguranca.api.manutencao.repository.ManutencaoRepository;
 import com.api.seguranca.api.veiculo.entity.VeiculoEntity;
 import com.api.seguranca.api.veiculo.repository.VeiculoRepository;
 
@@ -19,11 +22,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ViagemService {
 
+    @Autowired
     private final ViagemRepository viagemRepository;
     private final VeiculoRepository veiculoRepository;
 
     public ViagemEntity salvar(ViagemDTO dto) {
-
+        
+        if (viagemRepository.existsConflitoViagem(
+            dto.getVeiculoId(),
+            dto.getDataSaida(),
+            dto.getDataChegada()
+        )) {
+            throw new ConflitoViagemException(
+                "Veículo já possui viagem nesse período."
+            );
+        }
         if (dto.getVeiculoId() == null) {
             throw new RuntimeException("veiculoId não pode ser null");
         };        
